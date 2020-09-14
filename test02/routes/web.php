@@ -17,3 +17,7 @@
 
 // Route::resource('/upload', 'UploadController');
 Route::resource('photos', 'PhotosController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
