@@ -1,4 +1,4 @@
-@extends('layouts.default_photo')
+@extends('layouts.default_photos')
 @section('title', 'ファイルアップロード機能')
 @section('content')
 

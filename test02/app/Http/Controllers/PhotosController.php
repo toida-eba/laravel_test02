@@ -38,8 +38,8 @@ class PhotosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+
         $input = $request->all();
 
         $fileName = $input['fileName']->getClientOriginalName();
@@ -55,9 +55,9 @@ class PhotosController extends Controller
         $path = '/images/' . $fileName;
 
         //↓ 追加 ↓
-        $photo = new Photo();
-        $photo->path = 'images/' . $fileName;
-        $photo->save();
+        $photos = new Photo();
+        $photos->path = 'images/' . $fileName;
+        $photos->save();
 
         return redirect('/photos/')->with('status', 'ファイルアップロードの処理完了！');
     }
