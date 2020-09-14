@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class PhotosController extends Controller
 {
@@ -24,6 +25,7 @@ class PhotosController extends Controller
     public function create()
     {
         //
+        return View('photos.create');
     }
 
     /**
@@ -35,6 +37,22 @@ class PhotosController extends Controller
     public function store(Request $request)
     {
         //
+        //リクエストの全入力を取得する
+        $input = $request->all();
+
+        //getClientOriginalName():アップロードしたファイルのオリジナル名を取得します
+        $fileName = $input['fileName']->getClientOriginalName();
+
+        //getRealPath():アップロードしたファイルのパスを取得します。
+        $image = Image::make($input['fileName']->getRealPath());
+
+        //画像を保存する
+        $image->save(public_path().'/images/'.$fileName);   #(2)
+
+        //パス
+        $path = 'images/'.$fileName;
+
+        return View('photos.complete')->with('path',$path);
     }
 
     /**

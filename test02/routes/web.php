@@ -15,4 +15,5 @@
 //     return view('welcome');
 // });
 
-Route::resource('/upload', 'UploadController');
+// Route::resource('/upload', 'UploadController');
+Route::resource('photos', 'PhotosController');
