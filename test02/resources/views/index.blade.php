@@ -7,7 +7,8 @@
 <body>
 
 	<form method="POST" action="/upload" enctype="multipart/form-data">
-        <a href="/storage/Emmet.png">アップロードファイル</a>
+        {{-- <a href="/storage/Emmet.png">アップロードファイル</a> --}}
+        <img src="/storage/Emmet.png">
 		{{ csrf_field() }}
 
 	<input type="file" id="file" name="file" class="form-control">
