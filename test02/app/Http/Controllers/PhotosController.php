@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use Intervention\Image\Facades\Image;
+use App\Photo;
 
 class PhotosController extends Controller
 {
@@ -15,6 +17,8 @@ class PhotosController extends Controller
     public function index()
     {
         //
+        $photo = Photo::latest('created_at')->paginate(10);
+        return View('photos.create')->with('photos',$photo);
     }
 
     /**
@@ -36,23 +40,26 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        //リクエストの全入力を取得する
         $input = $request->all();
 
-        //getClientOriginalName():アップロードしたファイルのオリジナル名を取得します
         $fileName = $input['fileName']->getClientOriginalName();
-
-        //getRealPath():アップロードしたファイルのパスを取得します。
+        $fileName = time()."@".$fileName;
         $image = Image::make($input['fileName']->getRealPath());
 
-        //画像を保存する
-        $image->save(public_path().'/images/'.$fileName);   #(2)
+        //画像リサイズ ※追加
+        $image->resize(100, null, function ($constraint) {
+        $constraint->aspectRatio();
+        });
 
-        //パス
-        $path = 'images/'.$fileName;
+        $image->save(public_path() . '/images/' . $fileName);
+        $path = '/images/' . $fileName;
 
-        return View('photos.complete')->with('path',$path);
+        //↓ 追加 ↓
+        $photo = new Photo();
+        $photo->path = 'images/' . $fileName;
+        $photo->save();
+
+        return redirect('/photos/')->with('status', 'ファイルアップロードの処理完了！');
     }
 
     /**
