@@ -7,7 +7,7 @@
 <body>
 
 	<form method="POST" action="/upload" enctype="multipart/form-data">
-
+        <a href="/storage/upload_file.pdf">アップロードファイル</a>
 		{{ csrf_field() }}
 
 	<input type="file" id="file" name="file" class="form-control">
