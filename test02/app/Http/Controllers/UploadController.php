@@ -17,6 +17,6 @@ class UploadController extends Controller
     {
         $file_name = $request->file('file')->getClientOriginalName();
 
-        $request->file('file')->storeAs('',$file_name);
+        $request->file('file')->storeAs('public',$file_name);
      }
 }
