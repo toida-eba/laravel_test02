@@ -9,11 +9,12 @@ class UploadController extends Controller
     //
     public function index()
     {
-
-    	return view('index');
+        $photo = Photo::latest('created_at')->paginate(10);
+        return View('photos.create')->with('photos',$photo);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $input = $request->all();
 
