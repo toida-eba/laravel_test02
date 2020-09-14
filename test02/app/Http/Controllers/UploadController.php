@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Photo;
 class UploadController extends Controller
 {
     //
@@ -13,10 +13,27 @@ class UploadController extends Controller
     	return view('index');
     }
 
-    public function store(Request $request)
-    {
-        $file_name = $request->file('file')->getClientOriginalName();
+    public function store(Request $request){
 
-        $request->file('file')->storeAs('public',$file_name);
-     }
+        $input = $request->all();
+
+        $fileName = $input['fileName']->getClientOriginalName();
+        $fileName = time()."@".$fileName;
+        $image = Image::make($input['fileName']->getRealPath());
+
+        //画像リサイズ ※追加
+        $image->resize(100, null, function ($constraint) {
+        $constraint->aspectRatio();
+        });
+
+        $image->save(public_path() . '/images/' . $fileName);
+        $path = '/images/' . $fileName;
+
+        //↓ 追加 ↓
+        $photo = new Photo();
+        $photo->path = 'images/' . $fileName;
+        $photo->save();
+
+        return redirect('/photos/')->with('status', 'ファイルアップロードの処理完了！');
+      }
 }
