@@ -13,9 +13,8 @@
         <hr>
         <button class="btn btn-success">登録</button>
     </form>
-
+    <img src="{{ asset('/storage/img/'.$item->file_name) }}">
 	{{-- <form method="POST" action="/upload" enctype="multipart/form-data">
-        {{-- <a href="/storage/Emmet.png">アップロードファイル</a> --}}
         <img src="/storage/Emmet.png">
 		{{ csrf_field() }}
 

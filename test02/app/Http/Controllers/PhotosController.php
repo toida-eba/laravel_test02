@@ -38,38 +38,28 @@ class PhotosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        if ($request->isMethod('POST')) {
+    public function store(Request $request){
 
-            $path = $request->file('image_file')->store('public/img');
+        $input = $request->all();
 
-            Item::create(['file_name' => basename($path)]);
+        $fileName = $input['fileName']->getClientOriginalName();
+        $fileName = time()."@".$fileName;
+        $image = Image::make($input['fileName']->getRealPath());
 
-            return redirect('/')->with(['success'=> 'ファイルを保存しました']);
-        }
-        // GET
-        return view('item.create');
-        // $input = $request->all();
+        //画像リサイズ ※追加
+        $image->resize(100, null, function ($constraint) {
+        $constraint->aspectRatio();
+        });
 
-        // $fileName = $input['fileName']->getClientOriginalName();
-        // $fileName = time()."@".$fileName;
-        // $image = Image::make($input['fileName']->getRealPath());
+        $image->save(public_path() . '/images/' . $fileName);
+        $path = '/images/' . $fileName;
 
-        // //画像リサイズ ※追加
-        // $image->resize(100, null, function ($constraint) {
-        // $constraint->aspectRatio();
-        // });
+        //↓ 追加 ↓
+        $photos = new Photo();
+        $photos->path = 'images/' . $fileName;
+        $photos->save();
 
-        // $image->save(public_path() . '/images/' . $fileName);
-        // $path = '/images/' . $fileName;
-
-        // //↓ 追加 ↓
-        // $photos = new Photo();
-        // $photos->path = 'images/' . $fileName;
-        // $photos->save();
-
-        // return redirect('/photos/')->with('status', 'ファイルアップロードの処理完了！');
+        return redirect('/photos/')->with('status', 'ファイルアップロードの処理完了！');
     }
 
     /**

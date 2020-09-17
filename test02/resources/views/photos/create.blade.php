@@ -7,6 +7,7 @@
 @endif
 
 {!! Form::open(['url' => 'photos/store', 'files' => true,'method' => 'post']) !!}
+{{ csrf_field() }}
 {!! Form::label('fileName', 'アップロード') !!}
 {!! Form::file('fileName') !!}
 {!! Form::submit('アップロードする') !!}
